@@ -83,17 +83,6 @@ func main() {
 	}
 }
 
-func usage() {
-	fmt.Println("failpoint-ctl enable/disable /target/path [/target/path2 /target/path3 ...]")
-	os.Exit(1)
-}
+func usage() { _ = "STUB: not implemented"; return }
 
-func restoreFiles(paths []string) {
-	for i := range paths {
-		restorer := code.NewRestorer(paths[i])
-		err := restorer.Restore()
-		if err != nil {
-			fmt.Println("Restore error " + err.Error())
-		}
-	}
-}
+func restoreFiles(paths []string) { _ = "STUB: not implemented"; return }

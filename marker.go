@@ -23,78 +23,110 @@ import "context"
 // failpoint.Inject("fail-point-name", func() (...){}
 // failpoint.Inject("fail-point-name", func(val failpoint.Value) (...){}
 // failpoint.Inject("fail-point-name", func(_ failpoint.Value) (...){}
-func Inject(fpname string, fpbody interface{}) {}
+func Inject(fpname string, fpbody interface{}) {
+	_ = "STUB: not implemented"
 
-// InjectContext marks a fail point routine, which will be rewrite to a `if` statement
-// and be triggered by fail point name specified `fpname`
-// Note: The fail point closure  parameter type can only be `failpoint.Value`
-// e.g:
-// failpoint.InjectContext(ctx, "fail-point-name", func() (...){}
-// failpoint.InjectContext(ctx, "fail-point-name", func(val failpoint.Value) (...){}
-// failpoint.InjectContext(ctx, "fail-point-name", func(_ failpoint.Value) (...){}
-func InjectContext(ctx context.Context, fpname string, fpbody interface{}) {}
+	// InjectContext marks a fail point routine, which will be rewrite to a `if` statement
+	// and be triggered by fail point name specified `fpname`
+	// Note: The fail point closure  parameter type can only be `failpoint.Value`
+	// e.g:
+	// failpoint.InjectContext(ctx, "fail-point-name", func() (...){}
+	// failpoint.InjectContext(ctx, "fail-point-name", func(val failpoint.Value) (...){}
+	// failpoint.InjectContext(ctx, "fail-point-name", func(_ failpoint.Value) (...){}
+	return
+}
 
-// InjectCall marks a fail point routine, which will be rewrite to a `if` statement
-// and be triggered by fail point name specified `fpname` using EnableCall.
-// Note: this function can only be used when EnableCall is used in the same process
-// as the InjectCall, otherwise it's a noop.
-func InjectCall(fpname string, args ...any) {}
+func InjectContext(ctx context.Context, fpname string, fpbody interface{}) {
+	_ = "STUB: not implemented"
 
-// Break will generate a break statement in a loop, e.g:
-// case1:
-//
-//	for i := 0; i < max; i++ {
-//	    failpoint.Inject("break-if-index-equal-2", func() {
-//	        if i == 2 {
-//	            failpoint.Break()
-//	        }
-//	    }
-//	}
-//
-// failpoint.Break() => break
-//
-// case2:
-//
-//	outer:
-//	for i := 0; i < max; i++ {
-//	    for j := 0; j < max / 2; j++ {
-//	        failpoint.Inject("break-if-index-i-equal-j", func() {
-//	            if i == j {
-//	                failpoint.Break("outer")
-//	            }
-//	        }
-//	    }
-//	}
-//
-// failpoint.Break("outer") => break outer
-func Break(label ...string) {}
+	// InjectCall marks a fail point routine, which will be rewrite to a `if` statement
+	// and be triggered by fail point name specified `fpname` using EnableCall.
+	// Note: this function can only be used when EnableCall is used in the same process
+	// as the InjectCall, otherwise it's a noop.
+	return
+}
 
-// Goto will generate a goto statement the same as `failpoint.Break()`
-func Goto(label string) {}
+func InjectCall(fpname string, args ...any) {
+	_ = "STUB: not implemented"
 
-// Continue will generate a continue statement the same as `failpoint.Break()`
-func Continue(label ...string) {}
+	// Break will generate a break statement in a loop, e.g:
+	// case1:
+	//
+	//	for i := 0; i < max; i++ {
+	//	    failpoint.Inject("break-if-index-equal-2", func() {
+	//	        if i == 2 {
+	//	            failpoint.Break()
+	//	        }
+	//	    }
+	//	}
+	//
+	// failpoint.Break() => break
+	//
+	// case2:
+	//
+	//	outer:
+	//	for i := 0; i < max; i++ {
+	//	    for j := 0; j < max / 2; j++ {
+	//	        failpoint.Inject("break-if-index-i-equal-j", func() {
+	//	            if i == j {
+	//	                failpoint.Break("outer")
+	//	            }
+	//	        }
+	//	    }
+	//	}
+	//
+	// failpoint.Break("outer") => break outer
+	return
+}
 
-// Fallthrough will translate to a `fallthrough` statement
-func Fallthrough() {}
+func Break(label ...string) {
+	_ = "STUB: not implemented"
 
-// Return will translate to a `return` statement
-func Return(result ...interface{}) {}
+	// Goto will generate a goto statement the same as `failpoint.Break()`
+	return
+}
 
-// Label will generate a label statement, e.g.
-// case1:
-//
-//	failpoint.Label("outer")
-//	for i := 0; i < max; i++ {
-//	    for j := 0; j < max / 2; j++ {
-//	        failpoint.Inject("break-if-index-i-equal-j", func() {
-//	            if i == j {
-//	                failpoint.Break("outer")
-//	            }
-//	        }
-//	    }
-//	}
-//
-// failpoint.Label("outer") => outer:
-// failpoint.Break("outer") => break outer
-func Label(label string) {}
+func Goto(label string) {
+	_ = "STUB: not implemented"
+
+	// Continue will generate a continue statement the same as `failpoint.Break()`
+	return
+}
+
+func Continue(label ...string) {
+	_ = "STUB: not implemented"
+
+	// Fallthrough will translate to a `fallthrough` statement
+	return
+}
+
+func Fallthrough() {
+	_ = "STUB: not implemented"
+
+	// Return will translate to a `return` statement
+	return
+}
+
+func Return(result ...interface{}) {
+	_ = "STUB: not implemented"
+
+	// Label will generate a label statement, e.g.
+	// case1:
+	//
+	//	failpoint.Label("outer")
+	//	for i := 0; i < max; i++ {
+	//	    for j := 0; j < max / 2; j++ {
+	//	        failpoint.Inject("break-if-index-i-equal-j", func() {
+	//	            if i == j {
+	//	                failpoint.Break("outer")
+	//	            }
+	//	        }
+	//	    }
+	//	}
+	//
+	// failpoint.Label("outer") => outer:
+	// failpoint.Break("outer") => break outer
+	return
+}
+
+func Label(label string) { _ = "STUB: not implemented"; return }

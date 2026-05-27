@@ -32,11 +32,8 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"sort"
 	"strings"
 	"sync"
-
-	"github.com/pingcap/errors"
 )
 
 // FpError is the internal error of failpoint
@@ -90,22 +87,7 @@ type Failpoints struct {
 
 // Enable a failpoint on failpath
 func (fps *Failpoints) Enable(failpath, inTerms string) error {
-	fps.mu.Lock()
-	defer fps.mu.Unlock()
-
-	if fps.reg == nil {
-		fps.reg = make(map[string]*Failpoint)
-	}
-
-	fp := fps.reg[failpath]
-	if fp == nil {
-		fp = &Failpoint{}
-		fps.reg[failpath] = fp
-	}
-	err := fp.Enable(inTerms)
-	if err != nil {
-		return errors.Wrapf(err, "error on %s", failpath)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -114,180 +96,80 @@ func (fps *Failpoints) Enable(failpath, inTerms string) error {
 // the lock. It is useful when enables a panic failpoint
 // and does some post actions before the failpoint being evaluated.
 func (fps *Failpoints) EnableWith(failpath, inTerms string, action func() error) error {
-	fps.mu.Lock()
-	defer fps.mu.Unlock()
-
-	if fps.reg == nil {
-		fps.reg = make(map[string]*Failpoint)
-	}
-
-	fp := fps.reg[failpath]
-	if fp == nil {
-		fp = &Failpoint{}
-		fps.reg[failpath] = fp
-	}
-	err := fp.EnableWith(inTerms, action)
-	if err != nil {
-		return errors.Wrapf(err, "error on %s", failpath)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // EnableCall enables a failpoint which is a InjectCall type failpoint.
 func (fps *Failpoints) EnableCall(failpath string, fn any) error {
-	fps.mu.Lock()
-	defer fps.mu.Unlock()
-
-	if fps.reg == nil {
-		fps.reg = make(map[string]*Failpoint)
-	}
-
-	fp := fps.reg[failpath]
-	if fp == nil {
-		fp = &Failpoint{}
-		fps.reg[failpath] = fp
-	}
-	err := fp.EnableCall(fn)
-	if err != nil {
-		return errors.Wrapf(err, "error on %s", failpath)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Disable a failpoint on failpath
-func (fps *Failpoints) Disable(failpath string) error {
-	fps.mu.Lock()
-	defer fps.mu.Unlock()
-
-	fp := fps.reg[failpath]
-	if fp == nil {
-		return errors.Wrapf(ErrNotExist, "error on %s", failpath)
-	}
-	fp.Disable()
-	return nil
-}
+func (fps *Failpoints) Disable(failpath string) error { _ = "STUB: not implemented"; return nil }
 
 // Status gives the current setting for the failpoint
 func (fps *Failpoints) Status(failpath string) (string, error) {
-	fps.mu.RLock()
-	fp := fps.reg[failpath]
-	fps.mu.RUnlock()
-	if fp == nil {
-		return "", errors.Wrapf(ErrNotExist, "error on %s", failpath)
-	}
-	fp.mu.RLock()
-	t := fp.t
-	fp.mu.RUnlock()
-	if t == nil {
-		return "", errors.Wrapf(ErrDisabled, "error on %s", failpath)
-	}
-	return t.desc, nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // List returns all the failpoints information
-func (fps *Failpoints) List() []string {
-	fps.mu.RLock()
-	ret := make([]string, 0, len(failpoints.reg))
-	for fp := range fps.reg {
-		ret = append(ret, fp)
-	}
-	fps.mu.RUnlock()
-	sort.Strings(ret)
-	return ret
-}
+func (fps *Failpoints) List() []string { _ = "STUB: not implemented"; return nil }
 
 // EvalContext evaluates a failpoint's value, and calls hook if the context is
 // not nil and contains hook function. It will return the evaluated value and
 // true if the failpoint is active. Always returns false if ctx is nil
 // or context does not contains a hook function
 func (fps *Failpoints) EvalContext(ctx context.Context, failpath string) (Value, error) {
-	if ctx == nil {
-		return nil, errors.Wrapf(ErrNoContext, "error on %s", failpath)
-	}
-	hook, ok := ctx.Value(failpointCtxKey).(Hook)
-	if !ok {
-		return nil, errors.Wrapf(ErrNoHook, "error on %s", failpath)
-	}
-	if !hook(ctx, failpath) {
-		return nil, errors.Wrapf(ErrFiltered, "error on %s", failpath)
-	}
-	val, err := fps.Eval(failpath)
-	if err != nil {
-		return nil, errors.Wrapf(err, "error on %s", failpath)
-	}
-	return val, nil
+	_ = "STUB: not implemented"
+	return *new(Value), nil
 }
 
 // Eval evaluates a failpoint's value, It will return the evaluated value and
 // true if the failpoint is active
 func (fps *Failpoints) Eval(failpath string) (Value, error) {
-	fps.mu.RLock()
-	fp, found := fps.reg[failpath]
-	fps.mu.RUnlock()
-	if !found {
-		return nil, ErrNotExist
-	}
-
-	val, err := fp.Eval()
-	if err != nil {
-		return nil, err
-	}
-	return val, nil
+	_ = "STUB: not implemented"
+	return *new(Value), nil
 }
 
 // Call calls the function passed by EnableCall with args supplied in InjectCall.
-func (fps *Failpoints) Call(failpath string, args ...any) {
-	fps.mu.RLock()
-	fp, found := fps.reg[failpath]
-	fps.mu.RUnlock()
-	if !found {
-		return
-	}
-
-	fp.Call(args...)
-}
+func (fps *Failpoints) Call(failpath string, args ...any) { _ = "STUB: not implemented"; return }
 
 // failpoints is the default
 var failpoints Failpoints
 
 // Enable sets a failpoint to a given failpoint description.
-func Enable(failpath, inTerms string) error {
-	return failpoints.Enable(failpath, inTerms)
-}
+func Enable(failpath, inTerms string) error { _ = "STUB: not implemented"; return nil }
 
 // EnableWith enables and locks the failpoint, the lock prevents
 // the failpoint to be evaluated. It invokes the action while holding
 // the lock. It is useful when enables a panic failpoint
 // and does some post actions before the failpoint being evaluated.
 func EnableWith(failpath, inTerms string, action func() error) error {
-	return failpoints.EnableWith(failpath, inTerms, action)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // EnableCall enables a failpoint which is a InjectCall type failpoint.
 // The failpoint will call the function passed by EnableCall with args supplied in InjectCall.
 // this type of failpoint does not support terms, you should control the behavior in the function.
-func EnableCall(failpath string, fn any) error {
-	return failpoints.EnableCall(failpath, fn)
-}
+func EnableCall(failpath string, fn any) error { _ = "STUB: not implemented"; return nil }
 
 // Disable stops a failpoint from firing.
-func Disable(failpath string) error {
-	return failpoints.Disable(failpath)
-}
+func Disable(failpath string) error { _ = "STUB: not implemented"; return nil }
 
 // Status gives the current setting for the failpoint
-func Status(failpath string) (string, error) {
-	return failpoints.Status(failpath)
-}
+func Status(failpath string) (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // List returns all the failpoints information
-func List() []string {
-	return failpoints.List()
-}
+func List() []string { _ = "STUB: not implemented"; return nil }
 
 // WithHook binds a hook to a new context which is based on the `ctx` parameter
 func WithHook(ctx context.Context, hook Hook) context.Context {
-	return context.WithValue(ctx, failpointCtxKey, hook)
+	_ = "STUB: not implemented"
+	return *new(context.Context)
 }
 
 // EvalContext evaluates a failpoint's value, and calls hook if the context is
@@ -295,30 +177,17 @@ func WithHook(ctx context.Context, hook Hook) context.Context {
 // true if the failpoint is active. Always returns false if ctx is nil
 // or context does not contains hook function
 func EvalContext(ctx context.Context, failpath string) (Value, error) {
-	val, err := failpoints.EvalContext(ctx, failpath)
-	// The package level EvalContext usaully be injected into the users
-	// code, in which case the error can not be handled by the generated
-	// code. We print the error here.
-	if err, ok := errors.Cause(err).(FpError); !ok && err != nil {
-		fmt.Println(err)
-	}
-	return val, err
+	_ = "STUB: not implemented"
+	return *new(Value), nil
 }
+
+// The package level EvalContext usaully be injected into the users
+// code, in which case the error can not be handled by the generated
+// code. We print the error here.
 
 // Eval evaluates a failpoint's value, It will return the evaluated value and
 // nil err if the failpoint is active
-func Eval(failpath string) (Value, error) {
-	val, err := failpoints.Eval(failpath)
-	if err, ok := errors.Cause(err).(FpError); !ok && err != nil {
-		fmt.Println(err)
-	}
-	return val, err
-}
+func Eval(failpath string) (Value, error) { _ = "STUB: not implemented"; return *new(Value), nil }
 
 // Call calls the function passed by EnableCall with args supplied in InjectCall.
-func Call(failpath string, args ...any) {
-	if _, err := failpoints.Eval(failpath); err != nil {
-		return
-	}
-	failpoints.Call(failpath, args...)
-}
+func Call(failpath string, args ...any) { _ = "STUB: not implemented"; return }

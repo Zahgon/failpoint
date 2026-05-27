@@ -16,20 +16,6 @@ package injectcall
 
 import (
 	"context"
-	"fmt"
-
-	"github.com/pingcap/failpoint"
 )
 
-func foo(ctx context.Context, count int) int {
-	for i := 0; i < count; i++ {
-		fmt.Println(i)
-		failpoint.InjectCall("test", ctx, i, count)
-		select {
-		case <-ctx.Done():
-			return i
-		default:
-		}
-	}
-	return count
-}
+func foo(ctx context.Context, count int) int { _ = "STUB: not implemented"; return 0 }

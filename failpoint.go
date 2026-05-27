@@ -16,7 +16,6 @@ package failpoint
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 	"sync"
 )
@@ -50,101 +49,34 @@ type (
 
 // Pause will pause until the failpoint is disabled.
 func (fp *Failpoint) Pause() {
-	<-fp.waitChan
+	_ = "STUB: not implemented"
+
+	// Enable sets a failpoint to a given failpoint description.
+	return
 }
 
-// Enable sets a failpoint to a given failpoint description.
-func (fp *Failpoint) Enable(inTerms string) error {
-	t, err := newTerms(inTerms, fp)
-	if err != nil {
-		return err
-	}
-	fp.mu.Lock()
-	fp.t = t
-	fp.waitChan = make(chan struct{})
-	fp.mu.Unlock()
-	return nil
-}
+func (fp *Failpoint) Enable(inTerms string) error { _ = "STUB: not implemented"; return nil }
 
 // EnableWith enables and locks the failpoint, the lock prevents
 // the failpoint to be evaluated. It invokes the action while holding
 // the lock. It is useful when enables a panic failpoint
 // and does some post actions before the failpoint being evaluated.
 func (fp *Failpoint) EnableWith(inTerms string, action func() error) error {
-	t, err := newTerms(inTerms, fp)
-	if err != nil {
-		return err
-	}
-	fp.mu.Lock()
-	defer fp.mu.Unlock()
-	fp.t = t
-	fp.waitChan = make(chan struct{})
-	if err := action(); err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // EnableCall enables a failpoint which is a InjectCall type failpoint.
-func (fp *Failpoint) EnableCall(fn any) error {
-	value := reflect.ValueOf(fn)
-	if value.Kind() != reflect.Func {
-		return fmt.Errorf("failpoint: not a function")
-	}
-	t, err := newTerms("return(true)", fp)
-	if err != nil {
-		return err
-	}
-	fp.mu.Lock()
-	fp.t = t
-	fp.waitChan = make(chan struct{})
-	fp.fn = &value
-	fp.mu.Unlock()
-	return nil
-}
+func (fp *Failpoint) EnableCall(fn any) error { _ = "STUB: not implemented"; return nil }
 
 // Disable stops a failpoint
-func (fp *Failpoint) Disable() {
-	select {
-	case <-fp.waitChan:
-		// already disabled
-		return
-	default:
-		close(fp.waitChan)
-	}
+func (fp *Failpoint) Disable() { _ = "STUB: not implemented"; return }
 
-	fp.mu.Lock()
-	defer fp.mu.Unlock()
-	fp.t = nil
-}
+// already disabled
 
 // Eval evaluates a failpoint's value, It will return the evaluated value or
 // an error if the failpoint is disabled or failed to eval
-func (fp *Failpoint) Eval() (Value, error) {
-	fp.mu.RLock()
-	defer fp.mu.RUnlock()
-	if fp.t == nil {
-		return nil, ErrDisabled
-	}
-	v, err := fp.t.eval()
-	if err != nil {
-		return nil, err
-	}
-	return v, nil
-}
+func (fp *Failpoint) Eval() (Value, error) { _ = "STUB: not implemented"; return *new(Value), nil }
 
 // Call calls the function passed by EnableCall with args supplied in InjectCall.
-func (fp *Failpoint) Call(args ...any) {
-	fp.mu.RLock()
-	fn := fp.fn
-	fp.mu.RUnlock()
-
-	if fn == nil {
-		return
-	}
-	argVals := make([]reflect.Value, 0, len(args))
-	for _, a := range args {
-		argVals = append(argVals, reflect.ValueOf(a))
-	}
-	fn.Call(argVals)
-}
+func (fp *Failpoint) Call(args ...any) { _ = "STUB: not implemented"; return }

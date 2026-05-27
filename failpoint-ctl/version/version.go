@@ -14,8 +14,6 @@
 
 package version
 
-import "fmt"
-
 var (
 	releaseVersion = "None"
 	buildTS        = "None"
@@ -25,10 +23,4 @@ var (
 )
 
 // PrintVersion prints the release information
-func PrintVersion() {
-	fmt.Println("ReleaseVersion", releaseVersion)
-	fmt.Println("BuildTS", buildTS)
-	fmt.Println("GitHash", gitHash)
-	fmt.Println("GitBranch", gitBranch)
-	fmt.Println("GoVersion", goVersion)
-}
+func PrintVersion() { _ = "STUB: not implemented"; return }
